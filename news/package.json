@@ -10,8 +10,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "react": "16.13.1",
-    "react-native": "0.63.4"
+    "react-native": "0.63.4",
+    "url-parse": "^1.4.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
