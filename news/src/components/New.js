@@ -1,15 +1,53 @@
 import React from 'react'
-import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import urlParse from 'url-parse';
 import moment from 'moment'
 import es from 'moment/locale/es'
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 
 export default function New(props) {
     const {data: {title, url, created_at}} = props
 
-    const openUrl = () =>{
-        Linking.openURL(url)
+    const openUrl = async () =>{
+        try {
+            if (await InAppBrowser.isAvailable()) {
+              const result = await InAppBrowser.open(url, {
+                // iOS Properties
+                dismissButtonStyle: 'cancel',
+                preferredBarTintColor: '#000',
+                preferredControlTintColor: 'white',
+                readerMode: false,
+                animated: true,
+                modalPresentationStyle: 'fullScreen',
+                modalTransitionStyle: 'coverVertical',
+                modalEnabled: true,
+                enableBarCollapsing: false,
+                // Android Properties
+                showTitle: true,
+                toolbarColor: '#000000',
+                secondaryToolbarColor: 'white',
+                enableUrlBarHiding: true,
+                enableDefaultShare: true,
+                forceCloseOnRedirection: false,
+                // Specify full animation resource identifier(package:anim/name)
+                // or only resource name(in case of animation bundled with app).
+                animations: {
+                  startEnter: 'slide_in_right',
+                  startExit: 'slide_out_left',
+                  endEnter: 'slide_in_left',
+                  endExit: 'slide_out_right'
+                },
+                headers: {
+                  'my-custom-header': 'my custom header value'
+                }
+              })
+              // Alert.alert(JSON.stringify(result))
+            }
+            else Linking.openURL(url)
+          } catch (error) {
+            Alert.alert(error.message)
+          }
     }
 
     return (
